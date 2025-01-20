@@ -1,0 +1,31 @@
+ORIGINAL
+-/
+    - Test/
+        - Test/
+            - Rural/
+                - images_png/
+            - Urban/
+                - images_png/
+    - Train/
+        - Train/
+            - Rural/
+                - images_png/
+                - masks_png/
+            - Urban/
+                - images_png/
+                - masks_png/
+    - Val/
+        - Val/
+            - Rural/
+                - images_png/
+                - masks_png/
+            - Urban/
+                - images_png/
+                - masks_png/
+
+GENERATED
+-/
+    - TrainMasksColour/
+    - TrainMasksGrayscale/
+    - ValMasksColour/
+    - ValMasksGrayscale/
