@@ -6,7 +6,7 @@ Keywords: deep learning; transfer learning; forest cover change detection; river
 
 [Notes about data preparation](/data_preparation)
 
-1. [LoveDA](https://github.com/Junjue-Wang/LoveDA)
+1. [LoveDA](https://github.com/Junjue-Wang/LoveDA) | [Processed](https://drive.google.com/drive/folders/1AX5DdNeSseyn3rN89jYoNEznxX7QCUgH?usp=drive_link)
 
 1. [Change Detection Dataset](https://isprs-archives.copernicus.org/articles/XLII-2/565/2018/)
 
