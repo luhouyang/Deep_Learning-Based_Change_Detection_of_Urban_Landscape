@@ -15,7 +15,7 @@
 # # %%
 
 import os
-import cv2
+from PIL import Image
 import numpy as np
 
 label_mapping = {
@@ -29,14 +29,22 @@ label_mapping = {
     0: 0   # No-data -> 0 (Ignored)
 }
 
-# open-cv (BGR) formatting
-color_mapping = {
+colour_mapping = {
     1: (0, 255, 0),     # Forest - Bright Green
-    2: (255, 0, 0),     # Water - Bright Blue
-    3: (0, 165, 255),   # Barren land - Bright Orange
+    2: (0, 0, 255),     # Water - Bright Blue
+    3: (255, 165, 0),   # Barren land - Bright Orange
     4: (255, 0, 255),   # Human activity - Bright Magenta
-    5: (165, 165, 165), # Background - Gray
+    5: (165, 165, 165),   # Background - Gray
     0: (0, 0, 0)        # No-data - Black
+}
+
+grayscale_mapping = {
+    1: 50,   # Forest - Light gray
+    2: 100,  # Water - Medium gray
+    3: 150,  # Barren land - Darker gray
+    4: 200,  # Human activity - Even darker gray
+    5: 255,  # Background - White
+    0: 0     # No-data - Black
 }
 
 # input_dir = 'Train/Train/Urban/masks_png'
@@ -44,8 +52,8 @@ color_mapping = {
 # output_dir = 'TrainMasksGrayscale'
 
 input_dir = 'Val/Val/Urban/masks_png'
-# output_dir = 'ValMasksColour'
-output_dir = 'ValMasksGrayscale'
+output_dir = 'ValMasksColour'
+# output_dir = 'ValMasksGrayscale'
 
 os.makedirs(output_dir, exist_ok=True)
 
@@ -54,23 +62,29 @@ for filename in os.listdir(input_dir):
         input_path = os.path.join(input_dir, filename)
         output_path = os.path.join(output_dir, filename)
 
-        mask = cv2.imread(input_path, cv2.IMREAD_GRAYSCALE)
+        mask = Image.open(input_path).convert('L')
+        mask_array = np.array(mask)
 
-        # map labels
-        processed_mask = np.zeros_like(mask, dtype=np.uint8)
+        processed_mask = np.zeros_like(mask_array, dtype=np.uint8)
         for original_label, new_label in label_mapping.items():
-            processed_mask[mask == original_label] = new_label
+            processed_mask[mask_array == original_label] = new_label
 
-        # # grayscale to colour, uncomment when generating colour images
-        # colour_mask = np.zeros((mask.shape[0], mask.shape[1], 3), dtype=np.uint8)
-        # for label, color in color_mapping.items():
-        #     colour_mask[processed_mask == label] = color
+        # grayscale to colour, uncomment when generating colour images
+        colour_mask = np.zeros((mask_array.shape[0], mask_array.shape[1], 3), dtype=np.uint8)
+        for label, color in colour_mapping.items():
+            colour_mask[processed_mask == label] = color
 
-        # save
-        # cv2.imwrite(output_path, colour_mask)
-        cv2.imwrite(output_path, processed_mask)
+        colour_image = Image.fromarray(colour_mask, mode='RGB')
+        colour_image.save(output_path)
+
+        # # gray scale
+        # grayscale_mask = np.zeros_like(processed_mask, dtype=np.uint8)
+        # for label, gray_value in grayscale_mapping.items():
+        #     grayscale_mask[processed_mask == label] = gray_value
+
+        # colour_image = Image.fromarray(grayscale_mask, mode='L')
+        # colour_image.save(output_path)
 
         print(f"Processed: {filename} -> {output_path}")
 
 print("Processing complete, all masks saved to:", output_dir)
-

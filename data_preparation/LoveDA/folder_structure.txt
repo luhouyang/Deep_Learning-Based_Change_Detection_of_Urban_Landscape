@@ -25,7 +25,13 @@ ORIGINAL
 
 GENERATED
 -/
-    - TrainMasksColour/
-    - TrainMasksGrayscale/
-    - ValMasksColour/
-    - ValMasksGrayscale/
+    - Test/
+        - Test/
+            - Urban/
+                - TrainMasksColour/
+                - TrainMasksGrayscale/
+    - Val/
+        - Val/
+            - Urban/
+                - ValMasksColour/
+                - ValMasksGrayscale/
