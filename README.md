@@ -12,7 +12,7 @@ Keywords: deep learning; transfer learning; forest cover change detection; river
 
 ## **Report Draft**
 
-[Report](/docs/report_draft.pdf)
+[Report](https://drive.google.com/file/d/1YIqk1mqUxTfQ6spSek5eOrf2dWRm4xFW/view?usp=sharing)
 
 ## **Models**
 
