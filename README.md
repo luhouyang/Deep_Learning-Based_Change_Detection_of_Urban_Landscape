@@ -1,4 +1,4 @@
-# **Deep Learning-Based Change Detection of Urban Forest, Water, Barren Land, and Human Activity Growth**
+# **Deep Learning-Based Change Detection of Forest, Water, Barren Land, and Human Activity Growth**
 
 Keywords: deep learning; transfer learning; forest cover change detection; river change detection; barren land detection; very high resolution (VHR); DeepLabv3+; deeply supervised image fusion network (DSIFN); desertification
 
@@ -12,9 +12,15 @@ Keywords: deep learning; transfer learning; forest cover change detection; river
 
 ## **Report Draft**
 
-[Key Points](/docs/report_draft.pdf)
+[Report](/docs/report_draft.pdf)
 
 [References](/docs/references.pdf)
+
+## **Models**
+
+[Deeply Supervised Image Fusion Network](/src/dsifn/)
+
+[Fine-Tuned Deeplabv3](/src/deeplabv3/)
 
 ## **Setup/Environment**
 

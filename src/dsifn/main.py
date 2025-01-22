@@ -34,11 +34,8 @@ class ChannelAttention(nn.Module):
 
     def forward(self, x):
         avg_pool = torch.mean(x, dim=(2, 3), keepdim=True)
-        max_pool, _ = torch.max(
-            x, dim=2, keepdim=True)  # Apply max over the height dimension
-        max_pool, _ = torch.max(
-            max_pool, dim=3,
-            keepdim=True)  # Apply max over the width dimension
+        max_pool, _ = torch.max(x, dim=2, keepdim=True)
+        max_pool, _ = torch.max(max_pool, dim=3, keepdim=True)
 
         avg_pool = self.mlp(avg_pool.view(x.size(0),
                                           -1)).view(x.size(0), -1, 1, 1)
@@ -272,7 +269,9 @@ class DSIFN(torch.nn.Module):
 
         ds_5 = self.ds_conv2d[4](idf_5)
         ds_5 = self.sigmoid(ds_5)
-
+        """
+        return deep supervision outputs, for back-propogation from intermediate layers
+        """
         return (ds_1, ds_2, ds_3, ds_4, ds_5)
 
 
@@ -303,9 +302,9 @@ def train_model(model, criterion, dataloaders, optimizer, metrics, bpath,
 
         for phase in ['Train', 'Test']:
             if phase == 'Train':
-                model.train()  # Set model to training mode
+                model.train()
             else:
-                model.eval()  # Set model to evaluate mode
+                model.eval()
 
             running_loss = 0.0
 
@@ -320,10 +319,8 @@ def train_model(model, criterion, dataloaders, optimizer, metrics, bpath,
 
                 # track history if only in train
                 with torch.set_grad_enabled(phase == 'Train'):
-                    # Forward pass through the model
                     side_outputs = model(pre_change_image, post_change_image)
 
-                    # Define your transformations first
                     transform1 = transforms.Compose([
                         transforms.Resize((15, 15)),
                     ])
@@ -337,20 +334,17 @@ def train_model(model, criterion, dataloaders, optimizer, metrics, bpath,
                         transforms.Resize((122, 122)),
                     ])
 
-                    # Apply the transformations to the target
                     target1 = transform1(masks)
                     target2 = transform2(masks)
                     target3 = transform3(masks)
                     target4 = transform4(masks)
 
-                    # Compute loss for each side output independently
                     loss1 = deep_supervision_loss(side_outputs[0], target1)
                     loss2 = deep_supervision_loss(side_outputs[1], target2)
                     loss3 = deep_supervision_loss(side_outputs[2], target3)
                     loss4 = deep_supervision_loss(side_outputs[3], target4)
                     loss5 = deep_supervision_loss(side_outputs[4], masks)
 
-                    # Total loss
                     total_loss = loss1 + loss2 + loss3 + loss4 + loss5
 
                     # backward + optimize only if in training phase
@@ -368,7 +362,6 @@ def train_model(model, criterion, dataloaders, optimizer, metrics, bpath,
                     y_true = masks.data.cpu().numpy().ravel()
                     for name, metric in metrics.items():
                         if name == 'f1_score':
-                            # Use a classification threshold of 0.1
                             batchsummary[f'{phase}_{name}'].append(
                                 metric(y_true > 0, y_pred > 0.1))
                         # else:
@@ -428,7 +421,6 @@ def train_model(model, criterion, dataloaders, optimizer, metrics, bpath,
 def main():
     data_directory = Path(
         'D:/storage/ChangeDetectionDataset/Real/subset/train')
-    # Create the experiment directory if not present
     exp_directory = Path(
         'C:/Users/User/Desktop/Python/deep_learning/Deep_Learning-Based_Change_Detection_of_Urban_Landscape/src/dsifn/output'
     )
