@@ -16,7 +16,7 @@ Keywords: deep learning; transfer learning; forest cover change detection; river
 
 ## **Models**
 
-[Deeply Supervised Image Fusion Network](/src/dsifn/)
+Deeply Supervised Image Fusion Network [PyTorch .pth Model](https://drive.google.com/file/d/1FvhzXGa9grV2fcWcrTcKyfRg9HVwf81y/view?usp=sharing) | [CODE](/src/dsifn/)
 
 [Fine-Tuned Deeplabv3](/src/deeplabv3/)
 
