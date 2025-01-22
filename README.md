@@ -20,6 +20,10 @@ Deeply Supervised Image Fusion Network [PyTorch .pth Model](https://drive.google
 
 Fine-Tuned Deeplabv3 [UPDATED SOON, in lab session now]() | [CODE](/src/deeplabv3/)
 
+## **DSIFN**
+
+![DSIFN prediction image](/src/dsifn/output/Figure_1.png)
+
 ## **Setup/Environment**
 
 [Notes about setup & environment](/docs/setup)
