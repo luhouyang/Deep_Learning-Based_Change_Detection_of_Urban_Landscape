@@ -11,7 +11,7 @@ from tqdm import tqdm
 from datahandler import get_dataloader_single_folder
 from torchvision.models.segmentation.deeplabv3 import DeepLabHead
 from torchvision import models
-from sklearn.metrics import f1_score, jaccard_score
+from sklearn.metrics import f1_score, jaccard_score, accuracy_score
 
 
 def createDeepLabv3():
@@ -20,7 +20,7 @@ def createDeepLabv3():
         progress=True,
         weights=models.segmentation.DeepLabV3_ResNet101_Weights.DEFAULT)
     model.classifier = DeepLabHead(2048, num_classes=6)
-    
+
     model.train()
     return model
 
@@ -59,7 +59,7 @@ def train_model(model, criterion, dataloaders, optimizer, metrics, bpath,
             for sample in tqdm(iter(dataloaders[phase])):
                 inputs = sample['image'].to(device)
                 masks = sample['mask'].to(device).squeeze(1).long()
-                
+
                 optimizer.zero_grad()
 
                 # track history if only in train
@@ -67,6 +67,14 @@ def train_model(model, criterion, dataloaders, optimizer, metrics, bpath,
                     outputs = model(inputs)
                     # loss = criterion(outputs['out'], masks.squeeze(1).long())
                     loss = criterion(outputs['out'], masks)
+                    y_pred = outputs['out'].data.cpu().numpy()
+                    y_pred = y_pred.argmax(1).ravel()
+                    y_true = masks.data.cpu().numpy().ravel()
+
+                    for name, metric in metrics.items():
+                        if name == 'accuracy_score':
+                            batchsummary[f'{phase}_{name}'].append(
+                                metric(y_true > 0, y_pred > 0.1))
 
                     # backward + optimize only if in training phase
                     if phase == 'Train':
@@ -87,9 +95,10 @@ def train_model(model, criterion, dataloaders, optimizer, metrics, bpath,
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writerow(batchsummary)
             # deep copy the model
-            if phase == 'Test' and loss < best_loss:
-                best_loss = loss
-                best_model_wts = copy.deepcopy(model.state_dict())
+            if phase == 'Test':
+                if loss < best_loss:
+                    best_loss = loss
+                    best_model_wts = copy.deepcopy(model.state_dict())
 
                 model_path = f'{epoch}_deeplabv3_fitted.pth'
                 model_scripted = torch.jit.script(model)
@@ -126,7 +135,7 @@ def main():
     # Specify the optimizer with a lower learning rate
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
 
-    metrics = {'f1_score': f1_score, 'jaccard_score': jaccard_score}
+    metrics = {'accuracy_score': accuracy_score}
 
     epochs = 20
 
