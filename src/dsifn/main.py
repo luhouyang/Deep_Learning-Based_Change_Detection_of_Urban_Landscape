@@ -2,6 +2,7 @@ import copy
 import csv
 import os
 import time
+import argparse
 from pathlib import Path
 
 import numpy as np
@@ -396,12 +397,12 @@ def train_model(model, criterion, dataloaders, optimizer, metrics, bpath,
                 best_loss = epoch_loss
                 best_model_wts = copy.deepcopy(model.state_dict())
 
-                model_path = f'{epoch}_dsifn_fitted.pth'
+                model_path = f'{bpath}/{epoch}_dsifn_fitted.pth'
                 model_scripted = torch.jit.script(model)
                 model_scripted.save(model_path)
 
             if epoch % 5 == 0:
-                model_path = f'{epoch}_dsifn_fitted.pth'
+                model_path = f'{bpath}/{epoch}_dsifn_fitted.pth'
                 model_scripted = torch.jit.script(model)
                 model_scripted.save(model_path)
 
@@ -412,22 +413,35 @@ def train_model(model, criterion, dataloaders, optimizer, metrics, bpath,
 
     # load best model weights
     model.load_state_dict(best_model_wts)
-    model_path = 'finished_dsifn_fitted.pth'
+    model_path = f'{bpath}/finished_dsifn_fitted.pth'
     model_scripted = torch.jit.script(model)
     model_scripted.save(model_path)
     return model
 
 
 def main():
-    data_directory = Path(
-        'D:/storage/ChangeDetectionDataset/Real/subset/train')
-    exp_directory = Path(
-        'C:/Users/User/Desktop/Python/deep_learning/Deep_Learning-Based_Change_Detection_of_Urban_Landscape/src/dsifn/output'
-    )
-    if not exp_directory.exists():
-        exp_directory.mkdir()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("data_dir", help="root directory of training data")
+    parser.add_argument("output_dir", help="output directory")
+    parser.add_argument("epochs", help="number of epochs to train", type=int)
+    args = parser.parse_args()
 
-    train_dataloader = get_dataloader_single_folder(data_dir=data_directory,
+    # data_directory = Path(
+    #     'D:/storage/ChangeDetectionDataset/Real/subset/train')
+    # exp_directory = Path(
+    #     'C:/Users/User/Desktop/Python/deep_learning/Deep_Learning-Based_Change_Detection_of_Urban_Landscape/src/dsifn/output'
+    # )
+    # if not exp_directory.exists():
+    #     exp_directory.mkdir()
+
+    data_dir = Path(args.data_dir)
+    output_dir = Path(args.output_dir)
+    epochs = args.epochs
+
+    if not output_dir.exists:
+        output_dir.mkdir()
+
+    train_dataloader = get_dataloader_single_folder(data_dir=data_dir,
                                                     pre_image_folder='A',
                                                     post_image_folder='B',
                                                     mask_folder='OUT')
@@ -447,13 +461,13 @@ def main():
 
     metrics = {'f1_score': f1_score, 'auroc': roc_auc_score}
 
-    epochs = 50
+    # epochs = 50
 
     _ = train_model(model=model,
                     criterion=criterion,
                     dataloaders=train_dataloader,
                     optimizer=optimizer,
-                    bpath=exp_directory,
+                    bpath=output_dir,
                     metrics=metrics,
                     num_epochs=epochs,
                     scheduler=scheduler)
