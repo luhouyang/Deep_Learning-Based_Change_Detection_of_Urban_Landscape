@@ -22,9 +22,9 @@ Keywords: deep learning; transfer learning; forest cover change detection; river
     python main.py data_dir output_dir epochs
     ```
 
-## **Report Draft**
+## **Report**
 
-[Report](https://drive.google.com/file/d/1YIqk1mqUxTfQ6spSek5eOrf2dWRm4xFW/view?usp=sharing)
+[Report](https://drive.google.com/file/d/1cVmBE6pDX_FZewcTNYol1djh7_G_RyV4/view?usp=sharing)
 
 ## **Models**
 
