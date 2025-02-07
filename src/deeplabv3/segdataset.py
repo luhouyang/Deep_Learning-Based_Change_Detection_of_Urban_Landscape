@@ -118,6 +118,7 @@ class SegmentationDataset(VisionDataset):
             if self.transforms:
                 sample["image"] = self.transforms(sample["image"])
                 sample["mask"] = transforms.Compose([
+                    transforms.Resize((1024, 1024)),
                     transforms.ToTensor(),
                     transforms.Lambda(lambda x: (x * 255).long()),
                 ])(sample["mask"])
@@ -125,15 +126,26 @@ class SegmentationDataset(VisionDataset):
             return sample
 
     def grayscale_to_label(self, mask):
+        # # Define your grayscale mapping
+        # grayscale_mapping = {
+        #     50: 0,  # Forest
+        #     100: 1,  # Water
+        #     150: 2,  # Barren land
+        #     200: 3,  # Human activity
+        #     255: 4,  # Background
+        #     0: 5  # No-data
+        # }
         # Define your grayscale mapping
         grayscale_mapping = {
-            50: 0,  # Forest
-            100: 1,  # Water
-            150: 2,  # Barren land
-            200: 3,  # Human activity
-            255: 4,  # Background
-            0: 5  # No-data
+            50: 1,  # Forest
+            100: 2,  # Water
+            150: 3,  # Barren land
+            200: 4,  # Human activity
+            225: 5,  # agriculture
+            255: 6,  # Background
+            0: 0  # No-data
         }
+
         # Convert grayscale mask to label mask
         label_mask = torch.zeros_like(mask, dtype=torch.long)
         for gray_value, label in grayscale_mapping.items():

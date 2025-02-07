@@ -18,14 +18,45 @@ import os
 from PIL import Image
 import numpy as np
 
+# 6 classes (agriculture included in human activity)
+# label_mapping = {
+#     6: 1,  # Forest -> 1
+#     4: 2,  # Water -> 2
+#     5: 3,  # Barren land -> 3
+#     2: 4,  # Human activity (Building) -> 4
+#     3: 4,  # Human activity (Road) -> 4
+#     7: 4,  # Human activity (Agriculture) -> 4
+#     1: 5,  # Background -> 5
+#     0: 0   # No-data -> 0 (Ignored)
+# }
+
+# colour_mapping = {
+#     1: (0, 255, 0),     # Forest - Bright Green
+#     2: (0, 0, 255),     # Water - Bright Blue
+#     3: (255, 165, 0),   # Barren land - Bright Orange
+#     4: (255, 0, 255),   # Human activity - Bright Magenta
+#     5: (165, 165, 165), # Background - Gray
+#     0: (0, 0, 0)        # No-data - Black
+# }
+
+# grayscale_mapping = {
+#     1: 50,   # Forest - Light gray
+#     2: 100,  # Water - Medium gray
+#     3: 150,  # Barren land - Darker gray
+#     4: 200,  # Human activity - Even darker gray
+#     5: 255,  # Background - White
+#     0: 0     # No-data - Black
+# }
+
+# 7 classes (agriculture seperated as own class)
 label_mapping = {
     6: 1,  # Forest -> 1
     4: 2,  # Water -> 2
     5: 3,  # Barren land -> 3
     2: 4,  # Human activity (Building) -> 4
     3: 4,  # Human activity (Road) -> 4
-    7: 4,  # Human activity (Agriculture) -> 4
-    1: 5,  # Background -> 5
+    7: 5,  # Human activity (Agriculture) -> 5
+    1: 6,  # Background -> 6
     0: 0   # No-data -> 0 (Ignored)
 }
 
@@ -34,26 +65,28 @@ colour_mapping = {
     2: (0, 0, 255),     # Water - Bright Blue
     3: (255, 165, 0),   # Barren land - Bright Orange
     4: (255, 0, 255),   # Human activity - Bright Magenta
-    5: (165, 165, 165),   # Background - Gray
+    5: (255, 0, 0),     # Agriculture - Red
+    6: (165, 165, 165), # Background - Gray
     0: (0, 0, 0)        # No-data - Black
 }
 
 grayscale_mapping = {
-    1: 50,   # Forest - Light gray
-    2: 100,  # Water - Medium gray
-    3: 150,  # Barren land - Darker gray
-    4: 200,  # Human activity - Even darker gray
-    5: 255,  # Background - White
+    1: 50,   # Forest - Even darker gray
+    2: 100,  # Water - Darker gray
+    3: 150,  # Barren land - Medium gray
+    4: 200,  # Human activity - Light gray
+    5: 225,  # Agriculture - Even Lighter gray
+    6: 255,  # Background - White
     0: 0     # No-data - Black
 }
 
-# input_dir = 'Train/Train/Urban/masks_png'
-# output_dir = 'TrainMasksColour'
-# output_dir = 'TrainMasksGrayscale'
+input_dir = "D:/storage/loveda/Train/Train/Urban/masks_png"
+output_dir = 'D:/storage/loveda/Train/Train/Urban/TrainMasksColour7'
+# output_dir = 'D:/storage/loveda/Train/Train/Urban/TrainMasksGrayscale7'
 
-input_dir = 'Val/Val/Urban/masks_png'
-output_dir = 'ValMasksColour'
-# output_dir = 'ValMasksGrayscale'
+# input_dir = "D:/storage/loveda/Val/Val/Urban/masks_png"
+# output_dir = 'D:/storage/loveda/Val/Val/Urban/ValMasksColour7'
+# output_dir = 'D:/storage/loveda/Val/Val/Urban/ValMasksGrayscale7'
 
 os.makedirs(output_dir, exist_ok=True)
 

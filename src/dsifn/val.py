@@ -7,8 +7,32 @@ import torch
 import torch.nn.functional as F
 import torchvision.transforms as transforms
 
-from sklearn.metrics import f1_score, roc_auc_score
+from sklearn.metrics import f1_score, jaccard_score
+
 from tqdm import tqdm
+
+
+def mIOU(prediction, label, num_classes):
+    # prediction = prediction.max(1)[1].float().cpu().numpy()
+    # label = label.float().cpu().numpy()
+
+    iou_list = list()
+    present_iou_list = list()
+
+    for sem_class in range(num_classes):
+        pred_inds = (prediction == sem_class)
+        target_inds = (label == sem_class)
+        if target_inds.sum().item() == 0:
+            iou_now = float('nan')
+        else:
+            intersection_now = (pred_inds[target_inds]).sum().item()
+            union_now = pred_inds.sum().item() + target_inds.sum().item(
+            ) - intersection_now
+            iou_now = float(intersection_now) / float(union_now)
+            present_iou_list.append(iou_now)
+        iou_list.append(iou_now)
+    miou = np.mean(present_iou_list)
+    return miou
 
 
 def deep_supervision_loss(pred, target):
@@ -27,6 +51,7 @@ def val_model(model, dataloaders, metrics):
     phase = 'Val'
 
     f1_record = []
+    mIoU_record = []
 
     # Iterate over data.
     for sample in tqdm(iter(dataloaders[phase])):
@@ -70,6 +95,9 @@ def val_model(model, dataloaders, metrics):
                 if name == 'f1_score':
                     f1 = metric(y_true > 0, y_pred > 0.1)
                     f1_record.append(f1)
+                elif name == 'mIoU':
+                    miou = metric(side_outputs[4].data.cpu().numpy(), masks.data.cpu().numpy(), 6)
+                    mIoU_record.append(miou)
                 # else:
                 #     if len(np.unique(y_true)
                 #            ) > 1:  # Check if both classes are present
@@ -84,6 +112,7 @@ def val_model(model, dataloaders, metrics):
 
     print('{} Loss: {:.4f}'.format(phase, epoch_loss))
     print(f'F1 Score: {np.mean(f1_record):,.5f}')
+    print(f'mIoU Score: {np.mean(mIoU_record):,.5f}')
     print(
         f'Loss1: {loss1:,.2f}, Loss2: {loss2:,.2f}, Loss3: {loss3:,.2f}, Loss4: {loss4:,.2f}, Loss5: {loss5:,.2f}'
     )
@@ -105,7 +134,7 @@ def main():
     )
 
     model = torch.jit.load(
-        'C:/Users/User/Desktop/Python/deep_learning/Deep_Learning-Based_Change_Detection_of_Urban_Landscape/50_dsifn_fitted.pth'
+        'C:/Users/User/Desktop/Python/deep_learning/Deep_Learning-Based_Change_Detection_of_Urban_Landscape/models/50_dsifn_fitted.pth'
     )
     model.eval()
 

@@ -8,11 +8,14 @@ from torchvision import transforms
 
 from segdataset import SegmentationDataset
 
-def get_dataloader_single_folder(data_dir: str,
-                                 image_folder: str = 'Images',
-                                 mask_folder: str = 'Masks',
-                                 fraction: float = 0.175,
-                                 batch_size: int = 2):
+
+def get_dataloader_single_folder(
+        data_dir: str,
+        image_folder: str = 'Images',
+        mask_folder: str = 'Masks',
+        #  fraction: float = 0.175,
+        fraction: float = 0.04,
+        batch_size: int = 2):
     """Create train and test dataloader from a single directory containing
     the image and mask folders.
 
@@ -28,10 +31,11 @@ def get_dataloader_single_folder(data_dir: str,
         Train and Test dataloaders.
     """
     data_transforms = transforms.Compose([
+        transforms.Resize((1024, 1024)),
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.485, 0.456, 0.406],
                              std=[0.229, 0.224, 0.225])
-    ]) # values determined according to pytorch documentation
+    ])  # values determined according to pytorch documentation
 
     image_datasets = {
         x:
@@ -44,7 +48,7 @@ def get_dataloader_single_folder(data_dir: str,
                             transforms=data_transforms)
         for x in ['Train', 'Test']
     }
-    
+
     dataloaders = {
         x:
         DataLoader(image_datasets[x],

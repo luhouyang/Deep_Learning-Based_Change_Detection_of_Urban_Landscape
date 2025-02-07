@@ -433,6 +433,7 @@ def main():
     # )
     # if not exp_directory.exists():
     #     exp_directory.mkdir()
+    # python main.py D:\storage\ChangeDetectionDataset\Real\subset\train D:\storage\dsifn 50
 
     data_dir = Path(args.data_dir)
     output_dir = Path(args.output_dir)

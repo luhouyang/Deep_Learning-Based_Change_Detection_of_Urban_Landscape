@@ -3,6 +3,7 @@ import torch
 import copy
 import csv
 import os
+import argparse
 from pathlib import Path
 
 import numpy as np
@@ -15,11 +16,14 @@ from sklearn.metrics import f1_score, jaccard_score, accuracy_score
 
 
 def createDeepLabv3():
-    model = models.segmentation.deeplabv3_resnet101(
-        pretrained=True,
-        progress=True,
-        weights=models.segmentation.DeepLabV3_ResNet101_Weights.DEFAULT)
-    model.classifier = DeepLabHead(2048, num_classes=6)
+    # model = models.segmentation.deeplabv3_resnet101(
+    #     pretrained=True,
+    #     progress=True,
+    #     weights=models.segmentation.DeepLabV3_ResNet101_Weights.DEFAULT)
+    # model.classifier = DeepLabHead(2048, num_classes=7)
+    model = torch.jit.load(
+        "D:/storage/deeplabv3/20_deeplabv3_fitted.pth"
+    )
 
     model.train()
     return model
@@ -100,7 +104,7 @@ def train_model(model, criterion, dataloaders, optimizer, metrics, bpath,
                     best_loss = loss
                     best_model_wts = copy.deepcopy(model.state_dict())
 
-                model_path = f'{epoch}_deeplabv3_fitted.pth'
+                model_path = f'{bpath}/{epoch}_deeplabv3_fitted.pth'
                 model_scripted = torch.jit.script(model)
                 model_scripted.save(model_path)
 
@@ -115,17 +119,31 @@ def train_model(model, criterion, dataloaders, optimizer, metrics, bpath,
 
 
 def main():
-    data_directory = Path('D:/storage/loveda/Train/Train/Urban')
-    exp_directory = Path(
-        'C:/Users/User/Desktop/Python/deep_learning/Deep_Learning-Based_Change_Detection_of_Urban_Landscape/src/deeplabv3/output'
-    )
-    if not exp_directory.exists():
-        exp_directory.mkdir()
+    # data_directory = Path('D:/storage/loveda/Train/Train/Urban')
+    # exp_directory = Path(
+    #     'C:/Users/User/Desktop/Python/deep_learning/Deep_Learning-Based_Change_Detection_of_Urban_Landscape/src/deeplabv3/output'
+    # )
+    # if not exp_directory.exists():
+    #     exp_directory.mkdir()
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("data_dir", help="root directory of training data")
+    parser.add_argument("output_dir", help="output directory")
+    parser.add_argument("epochs", help="number of epochs to train", type=int)
+    args = parser.parse_args()
+
+    data_dir = Path(args.data_dir)
+    output_dir = Path(args.output_dir)
+    epochs = args.epochs
 
     train_dataloader = get_dataloader_single_folder(
-        data_dir=data_directory,
+        data_dir=data_dir,
         image_folder='images_png',
-        mask_folder='TrainMasksGrayscale')
+        mask_folder='TrainMasksGrayscale7')
+    # train_dataloader = get_dataloader_single_folder(
+    #     data_dir=data_dir,
+    #     image_folder='Images',
+    #     mask_folder='Masks')
 
     model = createDeepLabv3()
     model.train()
@@ -133,17 +151,17 @@ def main():
     # criterion = torch.nn.MSELoss(reduction='mean')
     criterion = torch.nn.CrossEntropyLoss()
     # Specify the optimizer with a lower learning rate
-    optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
+    optimizer = torch.optim.Adam(model.parameters(), lr=1e-5)
 
     metrics = {'accuracy_score': accuracy_score}
 
-    epochs = 20
+    # epochs = 20
 
     history = train_model(model=model,
                           criterion=criterion,
                           dataloaders=train_dataloader,
                           optimizer=optimizer,
-                          bpath=exp_directory,
+                          bpath=output_dir,
                           metrics=metrics,
                           num_epochs=epochs)
 
