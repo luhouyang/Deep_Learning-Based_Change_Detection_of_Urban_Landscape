@@ -13,8 +13,8 @@ def get_dataloader_single_folder(
         data_dir: str,
         image_folder: str = 'Images',
         mask_folder: str = 'Masks',
-        #  fraction: float = 0.175,
-        fraction: float = 0.04,
+         fraction: float = 0.175,
+        # fraction: float = 0.04,
         batch_size: int = 2):
     """Create train and test dataloader from a single directory containing
     the image and mask folders.

@@ -16,14 +16,11 @@ from sklearn.metrics import f1_score, jaccard_score, accuracy_score
 
 
 def createDeepLabv3():
-    # model = models.segmentation.deeplabv3_resnet101(
-    #     pretrained=True,
-    #     progress=True,
-    #     weights=models.segmentation.DeepLabV3_ResNet101_Weights.DEFAULT)
-    # model.classifier = DeepLabHead(2048, num_classes=7)
-    model = torch.jit.load(
-        "D:/storage/deeplabv3/20_deeplabv3_fitted.pth"
-    )
+    model = models.segmentation.deeplabv3_resnet101(
+        pretrained=True,
+        progress=True,
+        weights=models.segmentation.DeepLabV3_ResNet101_Weights.DEFAULT)
+    model.classifier = DeepLabHead(2048, num_classes=7)
 
     model.train()
     return model
@@ -125,6 +122,7 @@ def main():
     # )
     # if not exp_directory.exists():
     #     exp_directory.mkdir()
+    # 
 
     parser = argparse.ArgumentParser()
     parser.add_argument("data_dir", help="root directory of training data")

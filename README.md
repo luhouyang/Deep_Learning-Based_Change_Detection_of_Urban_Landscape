@@ -10,7 +10,7 @@ Keywords: deep learning; transfer learning; forest cover change detection; river
 
 1. [Change Detection Dataset](https://isprs-archives.copernicus.org/articles/XLII-2/565/2018/)
 
-## **Run training loop**
+## **Run training loop for DSIFN & Deeplabv3 models**
 
 1. `cd` to the directory with main.py file
     ```
