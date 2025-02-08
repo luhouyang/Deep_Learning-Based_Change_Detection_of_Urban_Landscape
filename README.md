@@ -17,6 +17,12 @@ Keywords: deep learning; transfer learning; forest cover change detection; river
     cd ../src/dsifn
     ```
 
+    or
+
+    ```
+    cd ../src/deeplabv3
+    ```
+
 1. Pass [data directory](https://isprs-archives.copernicus.org/articles/XLII-2/565/2018/), output directory, number of epochs as arguments in commandline
     ```
     python main.py data_dir output_dir epochs
