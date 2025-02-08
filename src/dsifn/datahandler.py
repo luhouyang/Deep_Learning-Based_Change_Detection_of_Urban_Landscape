@@ -10,8 +10,8 @@ from segdataset import SegmentationDataset
 
 
 def get_dataloader_sep_folder(data_dir: str,
-                              pre_image_folder: str = 'A',
-                              post_image_folder: str = 'B',
+                              pre_image_folder: str = 'B',
+                              post_image_folder: str = 'A',
                               mask_folder: str = 'OUT',
                               batch_size: int = 4):
     """ Create Train and Test dataloaders from two
@@ -54,8 +54,8 @@ def get_dataloader_sep_folder(data_dir: str,
         x:
         SegmentationDataset(root=Path(data_dir) / x,
                             transforms=data_transforms,
-                            pre_image_folder='A',
-                            post_image_folder='B',
+                            pre_image_folder=pre_image_folder,
+                            post_image_folder=post_image_folder,
                             mask_folder=mask_folder)
         for x in ['Train', 'Test']
     }
@@ -71,8 +71,8 @@ def get_dataloader_sep_folder(data_dir: str,
 
 
 def get_dataloader_single_folder(data_dir: str,
-                                 pre_image_folder: str = 'A',
-                                 post_image_folder: str = 'B',
+                                 pre_image_folder: str = 'B',
+                                 post_image_folder: str = 'A',
                                  mask_folder: str = 'Masks',
                                  fraction: float = 0.175,
                                  batch_size: int = 4):
@@ -119,8 +119,8 @@ def get_dataloader_single_folder(data_dir: str,
     image_datasets = {
         x:
         SegmentationDataset(data_dir,
-                            pre_image_folder='A',
-                            post_image_folder='B',
+                            pre_image_folder=pre_image_folder,
+                            post_image_folder=post_image_folder,
                             mask_folder=mask_folder,
                             seed=100,
                             fraction=fraction,
@@ -140,8 +140,8 @@ def get_dataloader_single_folder(data_dir: str,
 
 
 def get_val_dataloader_single_folder(data_dir: str,
-                                     pre_image_folder: str = 'A',
-                                     post_image_folder: str = 'B',
+                                     pre_image_folder: str = 'B',
+                                     post_image_folder: str = 'A',
                                      mask_folder: str = 'Masks',
                                      batch_size: int = 1):
 
@@ -155,8 +155,8 @@ def get_val_dataloader_single_folder(data_dir: str,
     image_datasets = {
         'Val':
         SegmentationDataset(data_dir,
-                            pre_image_folder='A',
-                            post_image_folder='B',
+                            pre_image_folder='B',
+                            post_image_folder='A',
                             mask_folder=mask_folder,
                             seed=100,
                             fraction=0.0,

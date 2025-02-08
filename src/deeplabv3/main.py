@@ -134,14 +134,14 @@ def main():
     output_dir = Path(args.output_dir)
     epochs = args.epochs
 
+    # train_dataloader = get_dataloader_single_folder(
+    #     data_dir=data_dir,
+    #     image_folder='images_png',
+    #     mask_folder='TrainMasksGrayscale7')
     train_dataloader = get_dataloader_single_folder(
         data_dir=data_dir,
         image_folder='images_png',
-        mask_folder='TrainMasksGrayscale7')
-    # train_dataloader = get_dataloader_single_folder(
-    #     data_dir=data_dir,
-    #     image_folder='Images',
-    #     mask_folder='Masks')
+        mask_folder='masks_png')
 
     model = createDeepLabv3()
     model.train()

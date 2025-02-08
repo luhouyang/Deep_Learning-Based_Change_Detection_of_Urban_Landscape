@@ -8,7 +8,31 @@ Keywords: deep learning; transfer learning; forest cover change detection; river
 
 1. [LoveDA](https://github.com/Junjue-Wang/LoveDA) | [Processed](https://drive.google.com/drive/folders/1AX5DdNeSseyn3rN89jYoNEznxX7QCUgH?usp=drive_link)
 
+    The directory structure for Deeplabv3 model.
+        
+        --train                 <-- root_dir
+            ------images_png    <-- post-change images
+                -----Image1
+                -----ImageN
+            ------masks_png     <-- pre-change images
+                -----Mask1
+                -----MaskN
+
 1. [Change Detection Dataset](https://isprs-archives.copernicus.org/articles/XLII-2/565/2018/)
+
+    The directory structure for DSIFN model.
+    
+        
+        --train             <-- root_dir
+            ------A         <-- post-change images
+                -----Image1
+                -----ImageN
+            ------B         <-- pre-change images
+                -----Image1
+                -----ImageN
+            ------OUT       <-- ground truth
+                -----Mask1
+                -----MaskN
 
 ## **Run training loop for DSIFN & Deeplabv3 models**
 

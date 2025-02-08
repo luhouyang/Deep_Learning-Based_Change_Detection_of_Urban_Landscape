@@ -443,8 +443,8 @@ def main():
         output_dir.mkdir()
 
     train_dataloader = get_dataloader_single_folder(data_dir=data_dir,
-                                                    pre_image_folder='A',
-                                                    post_image_folder='B',
+                                                    pre_image_folder='B',
+                                                    post_image_folder='A',
                                                     mask_folder='OUT')
 
     model = DSIFN()
