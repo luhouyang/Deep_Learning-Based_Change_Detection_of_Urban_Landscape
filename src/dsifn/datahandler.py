@@ -90,25 +90,7 @@ def get_dataloader_single_folder(data_dir: str,
         dataloaders: Returns dataloaders dictionary containing the
         Train and Test dataloaders.
     """
-    # data_transforms = {
-    #     'Train':
-    #     transforms.Compose([
-    #         transforms.RandomResizedCrop(244),
-    #         transforms.RandomHorizontalFlip(p=0.5),
-    #         transforms.RandomRotation(15),
-    #         transforms.GaussianBlur(kernel_size=(5, 9), sigma=(0.1, 5)),
-    #         transforms.ToTensor(),
-    #         transforms.Normalize(mean=[0.485, 0.456, 0.406],
-    #                              std=[0.229, 0.224, 0.225])
-    #     ]),
-    #     'Test':
-    #     transforms.Compose([
-    #         transforms.Resize((244, 244)),
-    #         transforms.ToTensor(),
-    #         transforms.Normalize(mean=[0.485, 0.456, 0.406],
-    #                              std=[0.229, 0.224, 0.225])
-    #     ])
-    # }
+
     data_transforms = transforms.Compose([
         transforms.Resize((244, 244)),
         transforms.ToTensor(),

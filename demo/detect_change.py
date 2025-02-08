@@ -26,9 +26,6 @@ change_detection_model = torch.jit.load(change_detection_model_path)
 change_detection_model.eval()
 
 # Load the semantic segmentation model
-# segmentation_model_path = 'C:/Users/User/Desktop/Python/deep_learning/Deep_Learning-Based_Change_Detection_of_Urban_Landscape/models/13_deeplabv3_fitted.pth'
-# segmentation_model_path = "D:/storage/deeplabv3/20_deeplabv3_fitted.pth"
-# segmentation_model_path = "D:/storage/dpl/5_deeplabv3_fitted.pth"
 segmentation_model_path = "D:/storage/dplbv3/16_deeplabv3_fitted.pth"
 segmentation_model = torch.jit.load(segmentation_model_path)
 segmentation_model.eval()
@@ -39,6 +36,7 @@ change_detection_preprocess = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
+
 # Define preprocessing for semantic segmentation
 segmentation_preprocess = transforms.Compose([
     transforms.Resize((1024, 1024),
@@ -48,24 +46,9 @@ segmentation_preprocess = transforms.Compose([
 ])
 
 # Load pre-change and post-change images for change detection
-# post_change_image = Image.open(
-#     'D:/storage/ChangeDetectionDataset/Real/subset/val/A/00029.jpg').convert(
-#         'RGB')
-# pre_change_image = Image.open(
-#     'D:/storage/ChangeDetectionDataset/Real/subset/val/B/00029.jpg').convert(
-#         'RGB')
-post_change_image = Image.open(
-    'D:/storage/ChangeDetectionDataset/Real/subset/test/A/01508.jpg').convert(
-        'RGB')
-pre_change_image = Image.open(
-    'D:/storage/ChangeDetectionDataset/Real/subset/test/B/01508.jpg').convert(
-        'RGB')
-# post_change_image = Image.open("C:/Users/User/Downloads/2_A.png").convert('RGB')
-# pre_change_image = Image.open("C:/Users/User/Downloads/2_B.png").convert('RGB')
-# post_change_image = Image.open("C:/Users/User/Downloads/2_Ab.png").convert(
-#     'RGB')
-# pre_change_image = Image.open("C:/Users/User/Downloads/2_Bb.png").convert(
-#     'RGB')
+post_change_image = Image.open("C:/Users/User/Downloads/2_A.png").convert('RGB')
+pre_change_image = Image.open("C:/Users/User/Downloads/2_B.png").convert('RGB')
+
 
 # Preprocess images for change detection
 pre_change_image_processed = change_detection_preprocess(

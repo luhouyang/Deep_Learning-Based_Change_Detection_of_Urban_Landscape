@@ -116,14 +116,6 @@ def train_model(model, criterion, dataloaders, optimizer, metrics, bpath,
 
 
 def main():
-    # data_directory = Path('D:/storage/loveda/Train/Train/Urban')
-    # exp_directory = Path(
-    #     'C:/Users/User/Desktop/Python/deep_learning/Deep_Learning-Based_Change_Detection_of_Urban_Landscape/src/deeplabv3/output'
-    # )
-    # if not exp_directory.exists():
-    #     exp_directory.mkdir()
-    # 
-
     parser = argparse.ArgumentParser()
     parser.add_argument("data_dir", help="root directory of training data")
     parser.add_argument("output_dir", help="output directory")

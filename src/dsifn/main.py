@@ -426,13 +426,6 @@ def main():
     parser.add_argument("epochs", help="number of epochs to train", type=int)
     args = parser.parse_args()
 
-    # data_directory = Path(
-    #     'D:/storage/ChangeDetectionDataset/Real/subset/train')
-    # exp_directory = Path(
-    #     'C:/Users/User/Desktop/Python/deep_learning/Deep_Learning-Based_Change_Detection_of_Urban_Landscape/src/dsifn/output'
-    # )
-    # if not exp_directory.exists():
-    #     exp_directory.mkdir()
     # python main.py D:\storage\ChangeDetectionDataset\Real\subset\train D:\storage\dsifn 50
 
     data_dir = Path(args.data_dir)
